@@ -1,0 +1,17 @@
+# Ignore virtual environments
+venv/
+newvenv/
+tempvenv/
+
+# Ignore environment variable files
+.env
+
+# macOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Pycache
+__pycache__/
+*.py[cod]
