@@ -1,0 +1,30 @@
+.leaflet-popup-content {
+    min-width: 200px;
+}
+
+.technician-popup {
+    background: #2c2c3c;
+    color: white;
+}
+
+/* Dark theme support */
+[data-bs-theme="dark"] .leaflet-popup-content-wrapper {
+    background: #2c2c3c;
+    color: white;
+}
+
+[data-bs-theme="dark"] .leaflet-popup-tip {
+    background: #2c2c3c;
+}
+
+/* Map container styles */
+#leafletMap {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Status badges */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+} 

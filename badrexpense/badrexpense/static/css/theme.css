@@ -1,0 +1,919 @@
+.theme-toggle-wrapper {
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+    z-index: 1029;
+}
+
+.theme-toggle-btn {
+    background-color: transparent;
+    border: 1px solid rgba(var(--bs-body-color-rgb), 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    background-color: rgba(var(--bs-body-color-rgb), 0.1);
+}
+
+.theme-dropdown {
+    min-width: 8rem;
+    padding: 0.5rem 0;
+}
+
+.theme-dropdown .dropdown-item {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.theme-dropdown .check-icon {
+    display: none;
+    margin-left: auto;
+}
+
+.theme-dropdown .dropdown-item.active .check-icon {
+    display: inline-block;
+}
+
+/* Dark mode specific styles */
+[data-bs-theme="dark"] .theme-toggle-btn {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Icon colors */
+.theme-toggle-btn i {
+    font-size: 1.2rem;
+}
+
+[data-bs-theme="dark"] .dark-mode-icon,
+[data-bs-theme="light"] .light-mode-icon {
+    display: inline-block;
+}
+
+[data-bs-theme="dark"] .light-mode-icon,
+[data-bs-theme="light"] .dark-mode-icon {
+    display: none;
+}
+
+/* Dark theme variables */
+:root {
+    --dark-bg: #1e1e1e;
+    --darker-bg: #171717;
+    --sidebar-bg: #252525;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-muted: #888;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #fff;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Top Navigation */
+.navbar-dark.bg-dark {
+    background-color: #2C2F33 !important;
+    border-bottom: 1px solid #484B51;
+}
+.btn-outline-light {
+    color: #FFFFFF;
+    border: none;
+    font-size: 1.5rem;
+}
+.btn-outline-light:hover {
+    color: #7289DA;
+}
+.container-fluid {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+/* Main Content Layout */
+.main-content {
+    height: calc(100vh - 96px);
+    position: relative;
+}
+
+/* Profile Strip */
+.profile-strip {
+    width: 60px;
+    background-color: var(--darker-bg);
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.status-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.profile-avatars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    position: relative;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid transparent;
+}
+
+.avatar.active img {
+    border-color: #4CAF50;
+}
+
+.avatar.online img {
+    border-color: #2196F3;
+}
+
+.avatar.offline img {
+    opacity: 0.5;
+}
+
+/* Map Container */
+.map-container {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#leafletMap {
+    position: relative !important;
+    width: 100% !important;
+    height: calc(100vh - 56px) !important;
+    z-index: 1 !important;
+}
+
+.map-controls {
+    position: fixed !important;
+    top: 70px !important;
+    left: 10px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: transparent !important;
+    pointer-events: auto !important;
+}
+
+.control-btn {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: white !important;
+    border: 2px solid rgba(0,0,0,0.2) !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    outline: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+/* Specific styling for add task button */
+#newTaskBtn {
+    background-color: white !important;
+    color: black !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    touch-action: none !important;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+#newTaskBtn:not(:disabled) {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+#newTaskBtn.active {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-color: #dc3545 !important;
+}
+
+#newTaskBtn:hover {
+    background-color: #f8f9fa !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+/* General control button states */
+.control-btn:hover {
+    background-color: #f8f9fa !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+.control-btn.active {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-color: #dc3545 !important;
+}
+
+.control-btn i {
+    font-size: 16px !important;
+    z-index: 10001 !important;
+    pointer-events: none !important;
+    -webkit-user-drag: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+/* Ensure icons don't interfere with clicks */
+.control-btn i,
+.control-btn svg {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+}
+
+/* Ensure leaflet controls stay above map */
+.leaflet-top,
+.leaflet-bottom {
+    z-index: 9000 !important;
+}
+
+.leaflet-control {
+    z-index: 9001 !important;
+}
+
+/* Modal Styles */
+.modal.fade .modal-dialog {
+    position: fixed !important;
+    left: calc(50% - 175px) !important; /* Adjust for half of sidebar width (350px/2) */
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: 90% !important;
+    max-width: 600px !important;
+    z-index: 10002 !important;
+}
+
+.modal-content {
+    background-color: #1a1a1a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+}
+
+/* Ensure form inputs are properly styled */
+.modal-content input,
+.modal-content select {
+    background-color: #2a2a2a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border-radius: 4px !important;
+}
+
+
+/* Style for the time inputs to ensure they're aligned */
+.input-group {
+    display: flex !important;
+    gap: 5px !important;
+}
+
+.input-group input {
+    flex: 1 !important;
+}
+
+/* Make modal header more prominent */
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 1rem !important;
+    background-color: #1a1a1a !important;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+.modal-title {
+    color: #fff !important;
+    font-weight: 500 !important;
+}
+
+/* Style the buttons */
+.modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 1rem !important;
+    background-color: #1a1a1a !important;
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+.modal-footer .btn {
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 4px !important;
+}
+
+/* Ensure modal is scrollable on smaller screens */
+.modal-body {
+    max-height: calc(100vh - 210px) !important;
+    overflow-y: auto !important;
+    padding: 1.5rem !important;
+    background-color: #1a1a1a !important;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    width: 350px;
+    background-color: var(--sidebar-bg);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.search-container {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-container .input-group {
+    flex: 1;
+}
+
+.search-container .input-group-text {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+.search-container .form-control {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: #fff;
+}
+
+.btn-icon {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tasks-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.task-section {
+    margin-bottom: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: #fff;
+}
+
+.task-items {
+    margin-top: 0.5rem;
+}
+
+.task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.task-item i {
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.task-details {
+    flex: 1;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+    font-size: 0.875rem;
+}
+
+/* Bottom Toolbar */
+.bottom-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: #1a1a1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 1000;
+}
+
+.toolbar-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toolbar-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.toolbar-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-btn i {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Dots styling */
+.driver-dots, .task-dots {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.task-dots .dot {
+    width: 6px;
+    height: 6px;
+}
+
+.task-dots .dot.blue { background-color: #2196F3; }
+.task-dots .dot.purple { background-color: #9C27B0; }
+.task-dots .dot.green { background-color: #4CAF50; }
+.task-dots .dot.yellow { background-color: #FFC107; }
+.task-dots .dot.red { background-color: #F44336; }
+
+/* Team section styles */
+.team-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.team-item:last-child {
+    border-bottom: none;
+}
+
+/* Navigation buttons */
+.btn-outline-light {
+    border-color: var(--border-color);
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Badge styles */
+.badge {
+    font-weight: normal;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Profile buttons styles */
+.profile-status-btn {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease;
+}
+
+.profile-status-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    align-items: center;
+}
+
+.profile-item {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+.profile-item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.profile-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Status indicators */
+.profile-item.active img {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.profile-item.online img {
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.profile-item.offline img {
+    border-color: #9E9E9E;
+    opacity: 0.7;
+}
+
+/* Status colors for profile borders */
+.border-success {
+    border-color: #28a745 !important;
+}
+
+.border-primary {
+    border-color: #007bff !important;
+}
+
+.border-warning {
+    border-color: #ffc107 !important;
+}
+
+.border-info {
+    border-color: #17a2b8 !important;
+}
+
+.border-light {
+    border-color: #f8f9fa !important;
+}
+
+.border-secondary {
+    border-color: #6c757d !important;
+}
+
+.border-dark {
+    border-color: #343a40 !important;
+}
+
+/* Sidebar Styles */
+.sidebar-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+}
+
+.task-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.task-list {
+    margin-top: 12px;
+}
+
+.task-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.task-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.location-icon {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    padding-top: 2px;
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-address {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.task-customer {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+/* Teams Section */
+.team-list {
+    margin-top: 8px;
+}
+
+.team-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.team-item:last-child {
+    border-bottom: none;
+}
+
+.team-name {
+    color: #fff;
+    font-size: 14px;
+}
+
+.team-status {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+/* Search Bar */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-input {
+    flex: 1;
+    position: relative;
+    margin-right: 8px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+}
+
+.search-field {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 8px 6px 30px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.search-field::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.menu-toggle {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4px 8px;
+    font-size: 16px;
+}
+
+/* Sidebar Content */
+.sidebar-content {
+    padding: 8px 0;
+}
+
+.section-group {
+    margin-bottom: 8px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-icon {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    width: 12px;
+}
+
+.section-icon {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    width: 16px;
+}
+
+.section-icon.online {
+    color: #4CAF50;
+}
+
+.section-icon.offline {
+    color: #9E9E9E;
+}
+
+.section-title {
+    color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.task-count, .team-status, .driver-status {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.section-content {
+    padding: 4px 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 32px 8px 40px;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.task-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.task-item.numbered {
+    padding-left: 12px;
+    position: relative;
+}
+
+.task-number {
+    width: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.location-icon {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.location-icon.blue { color: #2196F3; }
+.location-icon.purple { color: #9C27B0; }
+
+.task-details {
+    flex: 1;
+}
+
+.task-address {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.task-customer {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.task-time {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    text-align: right;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Collapsed state */
+.section-header.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.section-header.collapsed + .section-content {
+    display: none;
+} 
+/* In your CSS file */
+.non-scalable-icon {
+    transform: none !important;
+  }
+.leaflet-zoom-animated .non-scalable-icon {
+transition: none !important;
+}

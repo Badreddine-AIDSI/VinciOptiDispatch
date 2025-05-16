@@ -1,0 +1,132 @@
+{% extends 'base_auth.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .vh-100 {
+            height: 100vh;
+        }
+
+        .card {
+            border-radius: 25px;
+        }
+
+        .input-group-text {
+            border-right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .form-control {
+            border-radius: 0 10px 10px 0;
+            padding: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                                    <form action="{% url 'register'%}" method="post" class="mx-1 mx-md-4">
+                                        {% include 'partials/_message.html' %}
+                                        {% csrf_token %}
+                                        <div class="form-group mb-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-white">
+                                                        <img src="https://img.icons8.com/ios-filled/24/000000/user.png" class="form-icon" alt="User Icon" style="width: 20px; height: 20px;">
+                                                    </span>
+                                                </div>
+                                                <input type="text" id="usernameField" name="username" placeholder="Username" class="form-control" />
+                                            </div>
+                                            <div class="invalid_feedback invalid-feedback" style="display:none"></div>
+                                            <div class="text-sm text-success usernameSuccessOutput"></div>
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-white">
+                                                        <img src="https://img.icons8.com/ios-filled/24/000000/email.png" class="form-icon" alt="Email Icon" style="width: 20px; height: 20px;">
+                                                    </span>
+                                                </div>
+                                                <input type="email" id="emailField" name="email" placeholder="Email" class="form-control" />
+                                            </div>
+                                            <div class="invalid_feedback invalid-feedback" style="display:none"></div>
+                                            <div class="text-sm text-success emailSuccessOutput"></div>
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-white">
+                                                        <img src="https://img.icons8.com/ios-filled/24/000000/lock.png" class="form-icon" alt="Lock Icon" style="width: 20px; height: 20px;">
+                                                    </span>
+                                                </div>
+                                                <input type="password" id="passwordField" name="password" placeholder="Password" class="form-control" />
+                                            </div>
+                                            <div class="invalid_feedback invalid-feedback" style="display:none"></div>
+                                            <div class="text-sm text-success passwordSuccessOutput"></div>
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-white">
+                                                        <img src="https://img.icons8.com/ios-filled/24/000000/key.png" class="form-icon" alt="Key Icon" style="width: 20px; height: 20px;">
+                                                    </span>
+                                                </div>
+                                                <input type="password" id="repeatPasswordField" name="repeat_password" placeholder="Repeat Password" class="form-control" />
+                                            </div>
+                                            <div class="invalid_feedback invalid-feedback" style="display:none"></div>
+                                            <div class="text-sm text-success repeatPasswordSuccessOutput"></div>
+                                        </div>
+
+                                        <div class="form-check mb-5">
+                                            <input class="form-check-input" type="checkbox" value="" id="termsCheckbox" />
+                                            <label class="form-check-label" for="termsCheckbox">
+                                                I agree to all statements in <a href="#!">Terms of service</a>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <p class="small fw-bold mt-3 mb-0">Already have an account? <a href="{% url 'login' %}" class="link-primary">Login</a></p>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp" class="img-fluid" alt="Sample image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/register.js' %}"></script>
+</body>
+
+</html>
+{% endblock %}

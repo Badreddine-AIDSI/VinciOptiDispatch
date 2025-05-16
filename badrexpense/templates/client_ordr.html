@@ -1,0 +1,416 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dispatch Management System</title>
+  <!-- External CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}" />  <!-- Django static file reference -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+  {% csrf_token %}
+  <div class="d-flex">
+    <!-- Main Content (Map + Top Navbar) -->
+    <div class="flex-grow-1 position-relative">
+      <!-- Top Navigation Bar -->
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <div class="ms-auto d-flex">
+            <!-- Add Task Button (opens modal via JS) -->
+            <button id="newTaskBtn" class="btn btn-outline-light me-2" title="Add New Task" type="button" role="button" data-action="add-task">
+              <i class="bi bi-plus"></i>
+            </button>
+            <!-- (Other nav buttons ...) -->
+            <button class="btn btn-outline-light me-2"><i class="bi bi-file-earmark-plus"></i></button>
+            <button class="btn btn-outline-light me-2"><i class="bi bi-download"></i></button>
+            <button class="btn btn-outline-light me-2"><i class="bi bi-box-arrow-right"></i></button>
+            <button class="btn btn-outline-light"><i class="bi bi-box-arrow-up-right"></i></button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Map Container -->
+      <div id="flashMessages" class="position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>
+      <div id="leafletMap" class="w-100" style="height: calc(100vh - 56px);">
+        <!-- Map Controls (Zoom, Center, Add Task) -->
+        <div class="map-controls">
+          <button id="zoomInBtn" class="btn control-btn" title="Zoom In"><i class="fas fa-plus"></i></button>
+          <button id="zoomOutBtn" class="btn control-btn" title="Zoom Out"><i class="fas fa-minus"></i></button>
+          <button id="centerBtn" class="btn control-btn" title="Center Map"><i class="fas fa-crosshairs"></i></button>
+          <!-- Add Task control (same ID as top button for unified handling) -->
+          <button id="newTaskBtn" class="btn control-btn" title="Add New Task" type="button" role="button" data-action="add-task">
+            <i class="fas fa-plus" style="pointer-events: none;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- New Task Modal -->
+      <div class="modal fade" id="newTaskModal" tabindex="-1" aria-labelledby="newTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content bg-dark text-light">
+            <div class="modal-header border-secondary">
+              <h5 class="modal-title" id="newTaskModalLabel">Create New Task</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Task Creation Form -->
+              <form id="newTaskForm" method="post" action="{% url 'add_task' %}">
+                {% csrf_token %}
+                <!-- Location Fields (auto-filled via JS) -->
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="latitude" class="form-label">Latitude</label>
+                    <input type="text" class="form-control bg-dark text-light" id="latitude" name="latitude" readonly>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="longitude" class="form-label">Longitude</label>
+                    <input type="text" class="form-control bg-dark text-light" id="longitude" name="longitude" readonly>
+                  </div>
+                </div>
+                <!-- Date/Time Fields -->
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="scheduled_time" class="form-label">Scheduled Time</label>
+                    <div class="input-group">
+                      <input type="date" class="form-control bg-dark text-light" id="scheduled_date" name="scheduled_date" required>
+                      <input type="time" class="form-control bg-dark text-light" id="scheduled_time" name="scheduled_time" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="estimated_completion" class="form-label">Estimated Completion</label>
+                    <div class="input-group">
+                      <input type="date" class="form-control bg-dark text-light" id="estimated_date" name="estimated_date" required>
+                      <input type="time" class="form-control bg-dark text-light" id="estimated_time" name="estimated_time" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="actual_completion" class="form-label">Actual Completion</label>
+                    <div class="input-group">
+                      <input type="date" class="form-control bg-dark text-light" id="actual_date" name="actual_date">
+                      <input type="time" class="form-control bg-dark text-light" id="actual_time" name="actual_time">
+                    </div>
+                  </div>
+                </div>
+                <!-- Task Details Fields -->
+                <div class="mb-3">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" class="form-control bg-dark text-light" id="address" name="address" required>
+                </div>
+                <div class="mb-3">
+                  <label for="recipient_name" class="form-label">Recipient Name</label>
+                  <input type="text" class="form-control bg-dark text-light" id="recipient_name" name="recipient_name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="team" class="form-label">Team</label>
+                  <select class="form-select bg-dark text-light" id="team" name="team">
+                    <option value="">Select Team</option>
+                    {% for team in teams %}
+                      <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="technician" class="form-label">Technician</label>
+                  <select class="form-select bg-dark text-light" id="technician" name="technician">
+                    <option value="">Select Technician</option>
+                    {% for tech in technicians %}
+                      <option value="{{ tech.id }}">{{ tech.user.username }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="priority" class="form-label">Priority</label>
+                  <select class="form-select bg-dark text-light" id="priority" name="priority" required>
+                    <option value="blue">Blue</option>
+                    <option value="purple">Purple</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="red">Red</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <div class="d-flex align-items-center mb-2">
+                    <span class="me-3">Color key:</span>
+                    <span class="badge bg-secondary me-2">Unassigned/Assigned</span>
+                    <span class="badge bg-primary me-2">In Transit</span>
+                    <span class="badge bg-success me-2">Succeeded</span>
+                    <span class="badge bg-danger me-2">Failed</span>
+                  </div>
+                  <select class="form-select bg-dark text-light" id="status" name="status" required>
+                    <option value="unassigned">Unassigned</option>
+                    <option value="assigned">Assigned</option>
+                    <option value="in-transit">In Transit</option>
+                    <option value="succeeded">Succeeded</option>
+                    <option value="failed">Failed</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer border-secondary">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <!-- Submit button triggers JS fetch instead of normal POST -->
+              <button type="submit" form="newTaskForm" class="btn btn-primary">Create Task</button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End New Task Modal -->
+    </div>  <!-- End Main Content (Map + Navbar) -->
+
+    <!-- Sidebar (Teams, Technicians, Unassigned Tasks) -->
+    <div class="bg-dark border-start border-secondary" style="width: 350px; height: 100vh; overflow-y: auto;">
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search" class="search-field" autocomplete="off">
+        </div>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+      </div>
+      <!-- Sidebar Content Sections -->
+      <div id="taskList" class="sidebar-content">
+        <!-- Unassigned Tasks Section -->
+        <div class="section-group">
+          <div class="section-header expandable">
+            <div class="header-left">
+              <i class="fas fa-chevron-down toggle-icon"></i>
+              <i class="far fa-folder-open section-icon"></i>
+              <span class="section-title">Unassigned</span>
+            </div>
+            <span class="task-count">{{ unassigned_tasks|length }} tasks</span>
+          </div>
+          <div class="section-content">
+            {% for task in unassigned_tasks %}
+              <div class="task-item">
+                <!-- Status indicator icon (gray for unassigned) -->
+                <i class="fas fa-map-marker-alt location-icon text-secondary"></i>
+                <div class="task-details">
+                  <div class="task-address">{{ task.address }}</div>
+                  <div class="task-customer">{{ task.recipient_name }}</div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="text-muted px-3">No unassigned tasks</div>
+            {% endfor %}
+          </div>
+        </div>
+         <!-- Assigned Tasks Section -->
+  <div class="section-group">
+    <div class="section-header expandable">
+      <div class="header-left">
+        <i class="fas fa-chevron-down toggle-icon"></i>
+        <i class="fas fa-user-check section-icon"></i>
+        <span class="section-title">Assigned</span>
+      </div>
+      <span class="task-count">{{ assigned_tasks|length }} tasks</span>
+    </div>
+    <div class="section-content">
+      {% for task in assigned_tasks %}
+        <div class="task-item">
+          <!-- Status indicator icon (blue for assigned, or pick any color class) -->
+          <i class="fas fa-map-marker-alt location-icon text-info"></i>
+          <div class="task-details">
+            <div class="task-address">{{ task.address }}</div>
+            <div class="task-customer">{{ task.recipient_name }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-muted px-3">No assigned tasks</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- In Transit Tasks Section -->
+  <div class="section-group">
+    <div class="section-header expandable">
+      <div class="header-left">
+        <i class="fas fa-chevron-down toggle-icon"></i>
+        <i class="fas fa-truck section-icon"></i>
+        <span class="section-title">In Transit</span>
+      </div>
+      <span class="task-count">{{ in_transit_tasks|length }} tasks</span>
+    </div>
+    <div class="section-content">
+      {% for task in in_transit_tasks %}
+        <div class="task-item">
+          <!-- Status indicator icon (primary for in-transit, or your choice) -->
+          <i class="fas fa-map-marker-alt location-icon text-primary"></i>
+          <div class="task-details">
+            <div class="task-address">{{ task.address }}</div>
+            <div class="task-customer">{{ task.recipient_name }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-muted px-3">No tasks in transit</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Succeeded Tasks Section -->
+  <div class="section-group">
+    <div class="section-header expandable">
+      <div class="header-left">
+        <i class="fas fa-chevron-down toggle-icon"></i>
+        <i class="fas fa-flag-checkered section-icon"></i>
+        <span class="section-title">Succeeded</span>
+      </div>
+      <span class="task-count">{{ succeeded_tasks|length }} tasks</span>
+    </div>
+    <div class="section-content">
+      {% for task in succeeded_tasks %}
+        <div class="task-item">
+          <!-- Status indicator icon (green for succeeded) -->
+          <i class="fas fa-map-marker-alt location-icon text-success"></i>
+          <div class="task-details">
+            <div class="task-address">{{ task.address }}</div>
+            <div class="task-customer">{{ task.recipient_name }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-muted px-3">No succeeded tasks</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Failed Tasks Section -->
+  <div class="section-group">
+    <div class="section-header expandable">
+      <div class="header-left">
+        <i class="fas fa-chevron-down toggle-icon"></i>
+        <i class="fas fa-exclamation-triangle section-icon"></i>
+        <span class="section-title">Failed</span>
+      </div>
+      <span class="task-count">{{ failed_tasks|length }} tasks</span>
+    </div>
+    <div class="section-content">
+      {% for task in failed_tasks %}
+        <div class="task-item">
+          <!-- Status indicator icon (red for failed) -->
+          <i class="fas fa-map-marker-alt location-icon text-danger"></i>
+          <div class="task-details">
+            <div class="task-address">{{ task.address }}</div>
+            <div class="task-customer">{{ task.recipient_name }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="text-muted px-3">No failed tasks</div>
+      {% endfor %}
+    </div>
+  </div>
+
+        <div class="section-group">
+          <div class="section-header expandable">
+            <div class="header-left">
+              <i class="fas fa-users section-icon"></i>
+              <span class="section-title">Teams</span>
+            </div>
+            <span class="team-count">{{ teams|length }} teams</span>
+          </div>
+          <div class="section-content">
+            {% if teams %}
+              {% for team in teams %}
+                <div class="task-item">
+                  <i class="fas fa-users"></i>
+                  <div class="task-details">
+                    <div class="task-address">{{ team.name }}</div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="text-muted px-3">No teams found in template</div>
+              {% endfor %}
+            {% else %}
+              <div class="text-muted px-3">Teams variable is empty</div>
+            {% endif %}
+          </div>
+        </div>
+        
+
+
+        <!-- Technicians Section -->
+        <div class="section-group">
+          <div class="section-header expandable collapsed">
+            <div class="header-left">
+              <i class="fas fa-chevron-right toggle-icon"></i>
+              <i class="fas fa-user section-icon"></i>
+              <span class="section-title">Technicians</span>
+            </div>
+            <span class="tech-count">{{ technicians|length }} technicians</span>
+          </div>
+          <div class="section-content" style="display: none;">
+            {% for tech in technicians %}
+              <div class="task-item">
+                <i class="fas fa-user"></i>
+                <div class="task-details">
+                  <div class="task-address">{{ tech.name }}</div>
+                  {% if tech.current_task %}
+                    <!-- If desired, show technician’s current task status -->
+                    <div class="task-customer">
+                      Current: {{ tech.current_task.address }} – 
+                      <span class="{% if tech.current_task.status == 'in_transit' %}text-primary{% elif tech.current_task.status == 'success' %}text-success{% elif tech.current_task.status == 'failed' %}text-danger{% else %}text-secondary{% endif %}">
+                      </span>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div> <!-- End sidebar-content -->
+    </div> <!-- End Sidebar -->
+  </div> <!-- End d-flex container -->
+      <!-- Bottom Toolbar -->
+      <div class="bottom-toolbar">
+        <div class="toolbar-left">
+            <button class="toolbar-btn">
+                <i class="fas fa-filter"></i>
+                <span>Filters</span>
+                <i class="fas fa-chevron-down ms-1"></i>
+            </button>
+            <button class="toolbar-btn">
+                <i class="far fa-clock"></i>
+                <span>Today, 6am - 8am</span>
+            </button>
+            <button class="toolbar-btn">
+                <i class="fas fa-users"></i>
+                <span>All teams</span>
+            </button>
+            <ul id="teamList"></ul> 
+            <button class="toolbar-btn">
+                <div class="driver-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <span>All drivers</span>
+            </button>
+            <button class="toolbar-btn">
+                <div class="task-dots">
+                    <span class="dot blue"></span>
+                    <span class="dot purple"></span>
+                    <span class="dot green"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot red"></span>
+                </div>
+                <span>All tasks</span>
+            </button>
+            <button class="toolbar-btn">
+                <i class="fas fa-project-diagram"></i>
+                <span>All connections</span>
+            </button>
+        </div>
+    </div>
+
+  <!-- Include JS (Bootstrap, Leaflet, custom script) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="{% static 'js/map/main.js' %}"></script>
+
+
+
+</body>
+</html>

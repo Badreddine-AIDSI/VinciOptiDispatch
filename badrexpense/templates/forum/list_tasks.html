@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% include 'partials/_message.html' %}
+
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item">
+                <a href="{% url 'list_forum_tasks' %}"><i class="fas fa-tasks"></i> Tasks</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Tasks</li>
+        </ol>
+    </nav>
+
+    <!-- Action Buttons -->
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <a href="{% url 'add_forum_task' %}" class="btn btn-primary btn-block d-flex align-items-center gap-2">
+                <i class="fas fa-plus-circle"></i> Add New Task
+            </a>
+        </div>
+        <div class="col-md-9 text-end">
+            <a href="{% url 'export_tasks_csv' %}" class="btn btn-success"><i class="fas fa-file-csv"></i> Export CSV</a>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="row mt-4">
+        <div class="col-md-6 mx-auto">
+            <div class="input-group shadow-sm">
+                <form id="searchForm" action="{% url 'search-forum-tasks' %}" method="get" class="d-flex w-100">
+                    {% csrf_token %}
+                    <input type="text" class="form-control rounded-start" name="searchText" id="searchField" 
+                        placeholder="🔎 Search tasks..." value="{{ fieldValues.searchField }}">
+                    <button class="btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Map Modal -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Select Panne Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="map" style="height: 500px;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="saveLocation" class="btn btn-primary">Save Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <td class="text-center">
+        <button class="btn btn-info btn-sm select-location" data-task-id="{{ task.id }}">
+            <i class="fas fa-map-marker-alt"></i> Set Location
+        </button>
+    </td>
+    
+</td>
+    <!-- Task Table -->
+    <div class="table-responsive mt-4 shadow-sm rounded">
+        <table class="table table-hover table-striped align-middle">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>ID</th> <!-- Add this -->
+                    <th>Panne</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Reported By</th>
+                    <th>Date Reported</th>
+                    <th>Date Completed</th>
+                    <th>Duration</th>
+                    <th>Location</th>
+                     <!-- Add this -->
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tasksTable">
+                {% for task in page_obj %}
+                <tr>
+                    <td>{{ task.id }}</td> <!-- Show Task ID -->
+                    <td><span class="badge bg-primary">{{ task.machine.name }}</span></td>
+                    <td>{{ task.description }}</td>
+                    <td><span class="badge bg-primary">{{ task.category.name }}</span></td>
+                    <td class="text-capitalize">
+                        <form method="post" action="{% url 'update_task_status' task.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" aria-label="Change task status">
+                                <option value="open" {% if task.status == 'open' %}selected{% endif %}>🔵 Open</option>
+                                <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>🟡 In Progress</option>
+                                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>🟢 Completed</option>
+                                <option value="pending_review" {% if task.status == 'pending_review' %}selected{% endif %}>🟠 Pending Review</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>{{ task.reported_by.username }}</td>
+                    <td><i class="far fa-calendar-alt"></i> <span class="font-weight-bold">{{ task.date_reported|date:"d/m/Y H:i" }}</span></td>
+                    <td>
+                        {% if task.end_time %}
+                            <i class="far fa-calendar-check"></i> <span class="font-weight-bold">{{ task.end_time|date:"d/m/Y H:i" }}</span>
+                        {% else %}
+                            <span class="text-danger font-weight-bold">Not Completed</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.duration %}
+                            <i class="fas fa-clock"></i> 
+                            <span class="font-weight-bold">
+                                {% if task.total_days > 0 %}
+                                    {{ task.total_days }} days
+                                {% endif %}
+                                {% if task.total_hours > 0 %}
+                                    {{ task.total_hours }} hours
+                                {% endif %}
+                                {% if task.total_minutes > 0 %}
+                                    {{ task.total_minutes }} minutes
+                                {% endif %}
+                                {% if task.total_days == 0 and task.total_hours == 0 and task.total_minutes == 0 %}
+                                    Less than a minute
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <span class="text-danger font-weight-bold">Not Completed</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.latitude and task.longitude %}
+                            <a href="https://www.google.com/maps?q={{ task.latitude }},{{ task.longitude }}" target="_blank">
+                                <i class="fas fa-map-marker-alt"></i> View on Map
+                            </a>
+                        {% else %}
+                            <span class="text-danger">No Location</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url 'edit_forum_task' task.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete_forum_task' task.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this task?');">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center text-muted py-4">
+                        <i class="fas fa-folder-open fa-2x"></i>
+                        <p class="mt-2">No tasks found.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>            
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active text-danger">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<!-- Include JavaScript -->
+<script src="{% static 'js/taskForm.js' %}"></script>
+<script src="{% static 'js/searchTasks.js' %}"></script>
+<script src="{% static 'js/mapi.js' %}"></script>
+
+
+{% endblock %}

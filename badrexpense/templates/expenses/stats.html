@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% include 'partials/_message.html' %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'stats' %}">Summary Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Expenses</li>
+        </ol>
+    </nav>
+<div>
+    <canvas id="myChart" width="700" height="700"></canvas>
+    <script src="{% static 'js/stats.js' %}"></script>
+</div>
+<!-- Initialize the chart -->
+
+{% endblock %}

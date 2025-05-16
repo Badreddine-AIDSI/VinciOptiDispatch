@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'list_forum_tasks' %}">Tasks</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Add New Panne</li>
+    </ol>
+  </nav>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+      <h4 class="mb-3">Add New Panne</h4>
+    </div>
+    <div class="card-body">
+      <form action="{% url 'add_forum_task' %}" method="post">
+        {% csrf_token %}
+
+        <div class="mb-3 d-flex justify-content-between">
+          <label for="machine" class="form-label">Select Panne</label>
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMachineModal">
+            Add New Panne
+          </button>
+        </div>
+        <select name="machine" id="machine" class="form-control" required>
+          <option value="">Choose a panne</option>
+          {% for machine in machines %}
+          <option value="{{ machine.id }}">{{ machine.name }} - {{ machine.description }}</option>
+          {% endfor %}
+        </select>
+
+        <div class="mb-3 mt-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+          <label for="category" class="form-label">Select Category</label>
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            Add New Category
+          </button>
+        </div>
+        <select name="category" id="category" class="form-control" required>
+          <option value="">Choose a category</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+
+        <div class="mb-3 mt-3">
+          <label for="status" class="form-label">Status</label>
+          <select name="status" id="status" class="form-control" required>
+            <option value="open">Open</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        <!-- Automatically Fetched Location -->
+        <div class="mb-3 mt-3">
+          <label for="latitude" class="form-label">Latitude</label>
+          <input type="text" class="form-control" name="latitude" id="latitude" readonly>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="longitude" class="form-label">Longitude</label>
+          <input type="text" class="form-control" name="longitude" id="longitude" readonly>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Automatically get user's location
+  document.addEventListener("DOMContentLoaded", function () {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+              document.getElementById("latitude").value = position.coords.latitude;
+              document.getElementById("longitude").value = position.coords.longitude;
+          }, function (error) {
+              console.error("Error getting location: ", error);
+          });
+      } else {
+          console.error("Geolocation is not supported by this browser.");
+      }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% include 'partials/_message.html' %}
+    
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="{% url 'expenses' %}"><i class="fas fa-wallet"></i> Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Expenses</li>
+        </ol>
+    </nav>
+
+    <!-- Top Action Buttons -->
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <a href="{% url 'add-expenses' %}" class="btn btn-primary btn-block d-flex align-items-center gap-2">
+                <i class="fas fa-plus-circle"></i> Add New Expense
+            </a>
+        </div>
+        <div class="col-md-9 text-end">
+            <a href="{% url 'export_csv' %}" class="btn btn-success"><i class="fas fa-file-csv"></i> Export CSV</a>
+            <a href="{% url 'export_pdf' %}" class="btn btn-danger"><i class="fas fa-file-pdf"></i> Export PDF</a>
+            <a href="{% url 'export_excel' %}" class="btn btn-info"><i class="fas fa-file-excel"></i> Export Excel</a>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="row mt-4">
+        <div class="col-md-6 mx-auto">
+            <div class="input-group shadow-sm">
+                <form id="searchForm" action="{% url 'search-expenses' %}" method="get" class="d-flex w-100">
+                    {% csrf_token %}
+                    <input type="text" class="form-control rounded-start" name="searchText" id="searchField" 
+                        placeholder="🔎 Search expenses..." value="{{ fieldValues.searchField }}">
+                    <button class="btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expenses Table -->
+    <div class="table-responsive mt-4 shadow-sm rounded">
+        <table class="table table-hover table-striped align-middle">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>Amount ({{currency}})</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="expensesTable">
+                {% for expense in page_obj %}
+                <tr>
+                    <td><strong>${{ expense.amount }}</strong></td>
+                    <td>{{ expense.description }}</td>
+                    <td><span class="badge bg-primary">{{ expense.category }}</span></td>
+                    <td><i class="far fa-calendar-alt"></i> {{ expense.date }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'edit-expense' expense.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete-expense' expense.id %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-folder-open fa-2x"></i>
+                        <p class="mt-2">No expenses found.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<!-- Include JavaScript -->
+<script src="{% static 'js/searchExpenses.js'%}"></script>
+
+{% endblock %}

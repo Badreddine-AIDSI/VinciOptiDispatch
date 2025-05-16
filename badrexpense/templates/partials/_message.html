@@ -1,0 +1,20 @@
+{% if messages %}
+<div id="message-box" class="messages">
+    {% for message in messages %}
+        <div{% if message.tags %} class="alert alert-sm alert-{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    setTimeout(function() {
+        let messageBox = document.getElementById("message-box");
+        if (messageBox) {
+            messageBox.style.transition = "opacity 0.1s ease-out";
+            messageBox.style.opacity = "0";
+            setTimeout(() => messageBox.remove(), 50); // Remove from DOM after fading
+        }
+    }, 3000); // Message disappears after 3 seconds
+</script>
+{% endif %}

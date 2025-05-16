@@ -1,0 +1,635 @@
+[
+    {
+        "username": "bedro",
+        "email": "bedro@app.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "aymene",
+        "email": "bahsaniaymane@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "345",
+        "email": "bad@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "taha",
+        "email": "taha@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "BADR",
+        "email": "b.boukfa@edu.umi.ac.ma",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "Mimoun",
+        "email": "mimounechouaf2030@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "aymen",
+        "email": "aymaneelmazani12@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "pdf",
+        "email": "dsfdskjf@h.d",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "Chaimae",
+        "email": "boualamchaimae05@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "doha",
+        "email": "jdairdoh24@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "moncef",
+        "email": "moncmz@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "moncef1",
+        "email": "moncmz15@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "amin",
+        "email": "badreddineboukfa@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "bader",
+        "email": "bader@gmail.com",
+        "tasks": [
+            {
+                "machine": "Convoyeur",
+                "description": "-EXOMPLE",
+                "category": "main d'eouvre",
+                "status": "completed",
+                "date_reported": "2024-10-20 23:29",
+                "date_completed": "2024-10-20 23:29",
+                "duration": "0:00:37.178045"
+            },
+            {
+                "machine": "A-4",
+                "description": "this jfdl ",
+                "category": "abdo",
+                "status": "completed",
+                "date_reported": "2024-10-20 21:12",
+                "date_completed": "2024-10-20 21:12",
+                "duration": "0:00:32.510565"
+            },
+            {
+                "machine": "A-212",
+                "description": "tis",
+                "category": "panne1",
+                "status": "completed",
+                "date_reported": "2024-10-20 20:51",
+                "date_completed": "2024-10-20 20:51",
+                "duration": "0:00:26.718312"
+            },
+            {
+                "machine": "A-212",
+                "description": "dsfd",
+                "category": "main d'eouvre",
+                "status": "completed",
+                "date_reported": "2024-10-20 20:50",
+                "date_completed": "2024-10-20 20:51",
+                "duration": "0:01:14.967410"
+            },
+            {
+                "machine": "A-3",
+                "description": "ex2",
+                "category": "panne1",
+                "status": "open",
+                "date_reported": "2024-10-20 20:26",
+                "date_completed": "2024-10-20 20:47",
+                "duration": "-1 day, 23:58:01.667330"
+            },
+            {
+                "machine": "A-212",
+                "description": "examples",
+                "category": "panne1",
+                "status": "completed",
+                "date_reported": "2024-10-20 20:26",
+                "date_completed": "2024-10-20 20:48",
+                "duration": "0:21:47.833525"
+            }
+        ],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "Alina",
+        "email": "bsdfk@gmaii.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "Badreddine",
+        "email": "b.badrst@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    },
+    {
+        "username": "Dounia",
+        "email": "elabidisoufiane0@gmail.com",
+        "tasks": [],
+        "machines": [
+            {
+                "name": "A-212",
+                "description": "this machine "
+            },
+            {
+                "name": "A-3",
+                "description": "electrical "
+            },
+            {
+                "name": "A-4",
+                "description": "kd"
+            },
+            {
+                "name": "Convoyeur",
+                "description": "[DGEE]"
+            }
+        ],
+        "categories": [
+            {
+                "name": "panne1"
+            },
+            {
+                "name": "main d'eouvre"
+            },
+            {
+                "name": "abdo"
+            }
+        ]
+    }
+]

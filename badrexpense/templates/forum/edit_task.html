@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'list_forum_tasks' %}">Tasks</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Edit Task</li>
+    </ol>
+  </nav>
+
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="mb-0">Edit Task</h4>
+    </div>
+    <div class="card-body">
+      <form action="{% url 'edit_forum_task' task.id %}" method="post">
+        {% include 'partials/_message.html' %}
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="machine" class="form-label">Select Machine</label>
+          <select name="machine" id="machine" class="form-select" required>
+            <option value="">Choose a machine</option>
+            {% for machine in machines %}
+            <option value="{{ machine.id }}" {% if machine.id == task.machine.id %}selected{% endif %}>{{ machine.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" name="description" id="description" rows="3" required>{{ task.description }}</textarea>
+        </div>
+        
+        <div class="mb-3">
+          <label for="category" class="form-label">Select Category</label>
+          <select name="category" id="category" class="form-select" required>
+            <option value="">Choose a category</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == task.category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select name="status" id="status" class="form-select" required>
+            <option value="open" {% if task.status == 'open' %}selected{% endif %}>Open</option>
+            <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+            <option value="pending_review" {% if task.status == 'pending_review' %}selected{% endif %}>Pending Review</option>
+          </select>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Update Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

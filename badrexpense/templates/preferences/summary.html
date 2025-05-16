@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% include 'partials/_message.html' %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'stats' %}">Summary Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Expenses</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- First Chart for Incomes -->
+        <div class="col-md-6">
+            <div class="chart-container">
+                <h3 class="text-center">Incomes by Source</h3>
+                <canvas id="myChart1" class="chart-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Second Chart for Expenses -->
+        <div class="col-md-6">
+            <div class="chart-container">
+                <h3 class="text-center">Expenses by Category</h3>
+                <canvas id="myChart2" class="chart-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the combined JavaScript for both charts -->
+    <script src="{% static 'js/combined_stats.js' %}"></script>
+</div>
+
+<style>
+    .chart-container {
+        position: relative;
+        height: 400px; /* Set fixed height */
+        width: 100%;
+        margin: 0 auto;
+    }
+    .chart-canvas {
+        display: block;
+        height: 100% !important; /* Ensure the canvas fills the container */
+        width: 100% !important;  /* Ensure the canvas fills the container */
+    }
+    .text-center {
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

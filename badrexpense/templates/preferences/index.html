@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        {% include 'partials/_message.html' %}
+        <div class="form-container">
+            <h2>Select Your Currency</h2>
+            <form action="{% url 'preferences' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <select class="custom-select custom-input" name="currency" id="currency" title="Select your currency">
+                        {% for currency in currencies %}
+                        <option value="{{ currency.value }}" {% if currency.value == selected_currency %}selected{% endif %}>
+                            {{ currency.name }} - {{ currency.value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-secondary custom-button">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

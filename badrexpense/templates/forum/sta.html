@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Include messages for alerts or notifications -->
+    {% include 'partials/_message.html' %}
+    
+    <!-- Breadcrumb navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light rounded">
+            <li class="breadcrumb-item"><a href="{% url 'sta' %}">Summary Expenses</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Expenses</li>
+        </ol>
+    </nav>
+
+    <!-- Charts Section -->
+    <div class="row mt-5">
+        <!-- Machine Downtime Duration Chart -->
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-center font-weight-bold">Machine Downtime Duration</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="machineDowntimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breakdown Frequency by Category Chart -->
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-center font-weight-bold">Breakdown Frequency by Category</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryFrequencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Chart.js library and custom JavaScript for the charts -->
+<script src="{% static 'js/Machin.js' %}"></script>
+
+<!-- Additional styling for the charts -->
+<style>
+    /* Breadcrumb styling for better UI */
+    .breadcrumb {
+        background-color: #f8f9fa;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+    }
+
+    /* Card styling for each chart */
+    .card {
+        border: none;
+        border-radius: 8px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+
+    /* Chart wrapper for responsive and proportional scaling */
+    .chart-wrapper {
+        position: relative;
+        padding-top: 75%; /* Aspect ratio 4:3 */
+        height: 0;
+    }
+
+    /* Canvas adjustments to ensure it fits within the wrapper */
+    .chart-wrapper canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Heading styles */
+    .text-center {
+        font-weight: bold;
+        color: #333; /* Adjusted color for better readability */
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

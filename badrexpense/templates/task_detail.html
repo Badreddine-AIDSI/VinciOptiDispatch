@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        #map { 
+            height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 1.5rem 0;
+        }
+        .status-badge {
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+            transition: all 0.3s ease;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .task-id {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .task-details {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .task-details p {
+            margin-bottom: 0.5rem;
+        }
+        .task-address {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .task-type {
+            font-weight: 500;
+            color: #495057;
+        }
+        .delivery-window {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            padding: 0.6rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-lg {
+            padding: 0.8rem 1.5rem;
+        }
+        .btn-group-vertical {
+            width: 100%;
+        }
+        .btn-group-vertical .btn {
+            margin-bottom: 0.5rem;
+        }
+        .badge.bg-warning {
+            background-color: #ffc107 !important;
+        }
+        .badge.bg-success {
+            background-color: #28a745 !important;
+        }
+        .badge.bg-danger {
+            background-color: #dc3545 !important;
+        }
+        .header-bar {
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 10px 10px 0 0;
+            margin: -20px -20px 20px -20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .recipient-name {
+            font-weight: 600;
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <div class="text-muted"><i class="bi bi-clock"></i> <span id="currentTime"></span></div>
+            <div class="text-muted"><i class="bi bi-battery-half"></i> 19%</div>
+        </div>
+
+        <div class="task-header">
+            <div class="task-id">Task {{ task.id }}</div>
+            <div>
+                <span id="statusBadge" class="badge 
+                    {% if task.status == 'in-transit' %}bg-warning text-dark
+                    {% elif task.status == 'completed' %}bg-success
+                    {% elif task.status == 'failed' %}bg-danger
+                    {% else %}bg-secondary{% endif %} status-badge">
+                    {{ task.status|title }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Task Details Card -->
+        <div class="task-details">
+            <div class="task-type">
+                <i class="bi bi-box-seam"></i> {{ task.code }} - {{ task.task_type }}
+            </div>
+            <p class="mt-3 mb-1 recipient-name">
+                <i class="bi bi-person"></i> {{ task.recipient_name }}
+            </p>
+            <p class="task-address">
+                <i class="bi bi-geo-alt"></i> {{ task.address }}
+            </p>
+            <div class="delivery-window">
+                <i class="bi bi-calendar-event"></i> Delivery window: {{ task.delivery_window }}
+            </div>
+        </div>
+
+        <!-- OpenStreetMap Container -->
+        <div id="map"></div>
+
+        <!-- Action Buttons -->
+        <div id="buttonContainer" class="mt-4">
+            {% if task.status == 'assigned' %}
+                <button onclick="startTask()" class="btn btn-primary btn-lg rounded-pill w-100">
+                    <i class="bi bi-play-fill"></i> Start Task
+                </button>
+            {% elif task.status == 'in-transit' %}
+                <div class="btn-group-vertical gap-2">
+                    <button onclick="completeTask('succeeded')" class="btn btn-success btn-lg rounded-pill">
+                        <i class="bi bi-check-lg"></i> Mark Succeeded
+                    </button>
+                    <button onclick="completeTask('failed')" class="btn btn-danger btn-lg rounded-pill">
+                        <i class="bi bi-x-lg"></i> Mark Failed
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Display current time
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+        }
+        updateTime();
+        setInterval(updateTime, 60000); // Update every minute
+
+        // Initialize map with task coordinates
+        const map = L.map('map').setView([{{ task.latitude }}, {{ task.longitude }}], 15);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors, © CARTO'
+        }).addTo(map);
+        
+        const marker = L.marker([{{ task.latitude }}, {{ task.longitude }}]).addTo(map);
+        marker.bindPopup('{{ task.address|escapejs }}').openPopup();
+
+        // Status Management
+        function getCSRFToken() {
+            const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+            return tokenInput ? tokenInput.value : '';
+        }
+        async function startTask() {
+            try {
+                // Show loading state
+                const startButton = document.querySelector('button');
+                if (startButton) {
+                    startButton.disabled = true;
+                    startButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Starting...';
+                }
+        
+                const response = await fetch(`/api/tasks/{{ task.id }}/start/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                });
+        
+                if (response.ok) {
+                    console.log('Task started successfully');
+                    
+                    // Update the status badge
+                    const statusBadge = document.getElementById('statusBadge');
+                    if (statusBadge) {
+                        statusBadge.textContent = 'In Transit';
+                        statusBadge.className = 'badge bg-warning text-dark status-badge';
+                    }
+                    
+                    // Update the button container with new buttons
+                    const buttonContainer = document.getElementById('buttonContainer');
+                    if (buttonContainer) {
+                        buttonContainer.innerHTML = `
+                            <div class="btn-group-vertical gap-2">
+                                <button onclick="completeTask('succeeded')" class="btn btn-success btn-lg rounded-pill">
+                                    <i class="bi bi-check-lg"></i> Mark Succeeded
+                                </button>
+                                <button onclick="completeTask('failed')" class="btn btn-danger btn-lg rounded-pill">
+                                    <i class="bi bi-x-lg"></i> Mark Failed
+                                </button>
+                            </div>
+                        `;
+                    }
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.error || 'Failed to start task'}`);
+                    // Re-enable button if there was an error
+                    if (startButton) {
+                        startButton.disabled = false;
+                        startButton.innerHTML = '<i class="bi bi-play-fill"></i> Start Task';
+                    }
+                }
+            } catch (error) {
+                console.error('Error starting task:', error);
+                alert('Network error. Please try again.');
+                // Re-enable button if there was an error
+                const startButton = document.querySelector('button');
+                if (startButton) {
+                    startButton.disabled = false;
+                    startButton.innerHTML = '<i class="bi bi-play-fill"></i> Start Task';
+                }
+            }
+        }
+
+        async function completeTask(result) {
+            try {
+                // Disable buttons to prevent double-submission
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    if (result === 'succeeded' && btn.classList.contains('btn-success')) {
+                        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+                    } else if (result === 'failed' && btn.classList.contains('btn-danger')) {
+                        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+                    }
+                });
+
+                const response = await fetch(`/api/tasks/{{ task.id }}/complete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ result: result }),
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    console.log(`Task marked as ${result}`);
+                    // Reload the page to show updated status
+                    window.location.reload();
+                } else {
+                    const errorData = await response.json();
+                    showNotification('Error: ' + (errorData.error || `Failed to mark task as ${result}`), 'danger');
+                    // Re-enable buttons if there was an error
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        if (result === 'succeeded' && btn.classList.contains('btn-success')) {
+                            btn.innerHTML = '<i class="bi bi-check-lg"></i> Mark Succeeded';
+                        } else if (result === 'failed' && btn.classList.contains('btn-danger')) {
+                            btn.innerHTML = '<i class="bi bi-x-lg"></i> Mark Failed';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(`Error completing task:`, error);
+                showNotification('Network error. Please try again.', 'danger');
+                // Re-enable buttons if there was an error
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    if (result === 'succeeded' && btn.classList.contains('btn-success')) {
+                        btn.innerHTML = '<i class="bi bi-check-lg"></i> Mark Succeeded';
+                    } else if (result === 'failed' && btn.classList.contains('btn-danger')) {
+                        btn.innerHTML = '<i class="bi bi-x-lg"></i> Mark Failed';
+                    }
+                });
+            }
+        }
+
+        // Create notification function
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show`;
+            notification.role = 'alert';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Add notification to the top of the container
+            const container = document.querySelector('.container');
+            container.insertBefore(notification, container.firstChild);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

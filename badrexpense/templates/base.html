@@ -1,0 +1,99 @@
+{% load static %}
+<html lang="en" data-bs-theme="auto">
+<head>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Enable dark mode by default or based on system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute("data-bs-theme", "dark");
+            }
+        });
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SAP {% block title %}{% endblock %}</title>
+
+    <!-- Load Only One Bootstrap Version (Latest) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+
+    <!-- Load Custom CSS (Ensure it's AFTER Bootstrap) -->
+    <link rel="stylesheet" href="{% static 'css/navi.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/client_order.css' %}">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="{% static 'css/map.css' %}" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+</head>
+
+    <!-- jQuery (Required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle-wrapper">
+        <div class="dropdown">
+            <button class="btn theme-toggle-btn" 
+                    type="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                <i class="fas fa-moon dark-mode-icon"></i>
+                <i class="fas fa-sun light-mode-icon d-none"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end theme-dropdown">
+                <li>
+                    <button type="button" class="dropdown-item" data-bs-theme-value="light">
+                        <i class="fas fa-sun me-2"></i>
+                        Light
+                        <i class="fas fa-check ms-auto check-icon"></i>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="dropdown-item" data-bs-theme-value="dark">
+                        <i class="fas fa-moon me-2"></i>
+                        Dark
+                        <i class="fas fa-check ms-auto check-icon"></i>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="dropdown-item" data-bs-theme-value="auto">
+                        <i class="fas fa-circle-half-stroke me-2"></i>
+                        Auto
+                        <i class="fas fa-check ms-auto check-icon"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Include Sidebar -->
+    {% include 'partials/_sidebar.html' %}
+
+    <!-- Main Content -->
+    <main id="main-content" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Load JavaScript -->
+    <script src="{% static 'js/sidebar.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/taskForm.js' %}"></script>
+    <script src="{% static 'js/mapi.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/client_order.js' %}"></script>
+</body>
+</html>
